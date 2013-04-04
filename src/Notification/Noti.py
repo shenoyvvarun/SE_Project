@@ -4,15 +4,14 @@ Created on 31-Mar-2013
 @author: Sai Gopal
 '''
 import smtplib
-from smtplib import SMTPAuthenticationError,  SMTPException,\
-    SMTPRecipientsRefused
+from smtplib import SMTPAuthenticationError,  SMTPException,SMTPRecipientsRefused
 
 def Get_Admin_Pass():
     ''' This Fuction Will Get Email And Pass 
      From DB And Return Them.
     '''
     
-    return 'pesitplacementofficer@gmail.com','hidden'
+    return 'pesitplacementofficer@gmail.com','hiddden'
 
 
 
@@ -45,4 +44,4 @@ def Send_Mail(LiEm,Sub,Mess):
     
     return 'Success'
 if __name__ == '__main__':
-    print(Send_Mail('hidden' 'Test Sub','Test Body'))
+    print(Send_Mail([''], 'Test Sub','Test Body'))
