@@ -21,9 +21,7 @@ function displayButtons(){
         buttons[i].style.top = startTop +"px"
         buttons[i].style.width = "11%"; //automatically fixes the height too, and 11 percent of the body is a safe bet.
         i%2?buttons[i].style.right="31%":buttons[i].style.left = "31%";
-        if (i %4 == 0) {
-            dashboard.style.height = dashboard.offsetHeight +(dashboard.offsetHeight * 0.12) + "px"
-        }
+        
         buttons[i].style.display ="inline";
     }
     student.style.top = dashboard.offsetTop + (0.1 * dashboard.offsetWidth)+ "px";

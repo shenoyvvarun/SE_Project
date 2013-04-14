@@ -64,7 +64,7 @@ body{
 #dashboard
 {
    
-    height: 50%;
+    height: 37em;
     width: 50%;
     margin-top: 5%;
     animation:myfirst 2s;
@@ -79,22 +79,22 @@ body{
 {
     from{
             width:15%;
-            height:15%;
+            height:21.5em;
         }
     to {
             width: 50%;
-            height:50%;
+            height:37em;
         }
 }
 @-moz-keyframes myfirst /* Firefox */
 {
     from {
             width:15%;
-            height:15%;
+            height:21.5em;
         }
     to {
             width:50%;
-            height:50%;
+            height:37em;
         }
 }
 
@@ -102,11 +102,11 @@ body{
 {
     from {
             width:15%;
-            height:15%;
+            height:21.5em;
         }
     to {
             width:50%;
-            height:50%;
+            height:37em;
         }
 }
 
@@ -114,10 +114,10 @@ body{
 {
     from {
             width:15%;
-            height:15%;
+            height:21.5em
             }
     to {
             width:50%;
-            height:50%;
+            height:37em;
         }
 }
