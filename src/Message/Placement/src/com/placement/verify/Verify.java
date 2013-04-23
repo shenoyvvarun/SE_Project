@@ -1,3 +1,14 @@
+/**
+ * The servlet is used to verify a request to register a mobile number to receive alerts.
+ * The design of this servlet is very special.
+ * This servlet is not for use by any application. It is to be used only by txtweb platform.
+ * The problem is that a server can not selectively serve clients, at-least not completely at application level
+ * Now for, that reason this class is designed specially.
+ * Using the txtweb platform and the data store. We can add a layer of security to this servlet. 
+ * @Author Varun V Shenoy
+ * @throws java.io.IOException
+ * 
+ */
 package com.placement.verify;
 /* STILL TO BE DONE
  * 
@@ -7,6 +18,7 @@ package com.placement.verify;
  * addmobileHash
  *
  */
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -37,7 +49,7 @@ public class Verify extends HttpServlet
     final String END_RESPONSE = "</body></html>";
 	final String VERIFYSERVICE_APIURL = "http://api.txtweb.com/v3/verify";
 	final String SUCCESS_CODE = "0";
-	final String APP_URL = "place-your-web-application's-url-here";
+	final String APP_URL = "http://pesit-placement.appspot.com/verify";
 	private void sendResponse(HttpServletResponse httpResponse, String response) throws IOException
 	{
 		httpResponse.setContentType("text/html");
@@ -61,24 +73,40 @@ public class Verify extends HttpServlet
                 +"&txtweb-mobile="+URLEncoder.encode(mobileHash,"UTF-8")
                 +"&txtweb-verifyid="+URLEncoder.encode(verifyId,"UTF-8")
                 +"&txtweb-protocol="+URLEncoder.encode(protocol,"UTF-8");
-
 		//Using DOM parser to parse the XML response from the API
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		Document doc =null;
 		try{
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		doc = db.parse(new URL(this.VERIFYSERVICE_APIURL+"?"+urlParams).openStream());
-		}
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			URL url = new URL(this.VERIFYSERVICE_APIURL+"?"+urlParams);
+			doc = db.parse(url.openStream());
+		} 
 		catch(ParserConfigurationException p)
 		{
-		p.printStackTrace();
-		System.out.println("Could Not get DocumentBuilder: Some weird error");
+			p.printStackTrace();
+			System.out.println("Could Not get DocumentBuilder: Some weird error");
+			sendResponse(resp, "Error registering the request. Please try again");
+			doc = null;
+		}
+		catch(IllegalArgumentException e)
+		{
+			e.printStackTrace();
+			sendResponse(resp, "Error registering the request. Please try again");
+			doc = null;
 		}
 		catch(SAXException s)
 		{
-		s.printStackTrace();
-		System.out.println("No internet or txtweb offline or no response from the api");
+			s.printStackTrace();
+			System.out.println("No internet or txtweb offline or no response from the api");
+			sendResponse(resp, "Error registering the request. Please try again");
+			doc = null;
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			sendResponse(resp, "Error registering the request. Please try again");
+			doc = null;
+		}  
 		if(doc != null)
 		{
 		    NodeList childNodes = doc.getChildNodes();
@@ -91,7 +119,10 @@ public class Verify extends HttpServlet
 		        {
 		            Element element = (Element) childNode;
 		            code = getTagValue("code", element);
-		            appUrl = getTagValue("url", element);
+		            if(this.SUCCESS_CODE.equals(code))
+		            {
+		            	appUrl = getTagValue("url",element);
+		            }
 		            //if statusCode is 0 and url matches with the web application URL, 
 		            //then the request has been successfully verified by txtWeb
 		            if (this.SUCCESS_CODE.equals(code) && this.APP_URL.equals(appUrl))
@@ -150,7 +181,12 @@ public class Verify extends HttpServlet
 		}
 		return validated;
 	}
-	
+	/**
+	 * The Get method of the servlet
+	 * @param req The request object which holds the information of the request made.Provided by the servlet container.
+	 * @param resp The response object which the servlet container provides. The response object can be used to communicate to the client
+	 * @throws IOException The exception is generally thrown when the req and resp objects are not complete.
+	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException 
 	{
 		//get request parameters : especially the encrypted text
@@ -168,6 +204,7 @@ public class Verify extends HttpServlet
 		{
 			String []mess = message.split(" ");
 			addMobileHash(mess[0],mess[1]);
+			sendResponse(resp, "Your Mobile is now Registered and Verified");
 		}
         
 	}
@@ -179,9 +216,14 @@ public class Verify extends HttpServlet
 
 	private boolean checkSubcribed(String usn, String hash) {
 
-		return false;
+		return true;
 	}
-
+	/**
+	 * The Post method of the servlet
+	 * @param req The request object which holds the information of the request made.Provided by the servlet container.
+	 * @param resp The response object which the servlet container provides. The response object can be used to communicate to the client
+	 * @throws IOException The exception is generally thrown when the req and resp objects are not complete.
+	 */
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException 
 	{
 		doGet(req,resp);
