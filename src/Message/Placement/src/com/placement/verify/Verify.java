@@ -1,21 +1,3 @@
-/**
- * The servlet is used to verify a request to register a mobile number to receive alerts.
- * The design of this servlet is very special.
- * This servlet is not for use by any application. It is to be used only by txtweb platform.
- * The problem is that a server can not selectively serve clients, at-least not completely at application level
- * Now for, that reason this class is designed specially.
- * Using the txtweb platform and the data store. We can add a layer of security to this servlet.
- * 
- * VERY VERY IMPORTANT NOTE:
- * This servlet is very very very^tan90 times costly compared to other operations. Instance hours consumed by 
- * this is tremendous and few hundred requests can finish all the quotas. No optimization can be done on this
- * servlet since the url call is synchronous( even if it is made asynchronous there is no use, since the main thread has 
- * to wait for this call to complete. And since the caller is txtweb we cannot even do much of anything.
- * 
- *   
- * @Author Varun V Shenoy
- * @throws java.io.IOException
- */
 package com.placement.verify;
 /* STILL TO BE DONE
  * 
@@ -53,11 +35,28 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 
 
-
+/**
+ * The servlet is used to verify a request to register a mobile number to receive alerts.
+ * The design of this servlet is very special.
+ * This servlet is not for use by any application. It is to be used only by txtweb platform.
+ * The problem is that a server can not selectively serve clients, at-least not completely at application level
+ * Now for, that reason this class is designed specially.
+ * Using the txtweb platform and the data store. We can add a layer of security to this servlet.
+ * mutiple verify requests are not a problem.
+ * VERY VERY IMPORTANT NOTE:
+ * This servlet is very very very^tan90 times costly compared to other operations. Instance hours consumed by 
+ * this is tremendous and few hundred requests can finish all the quotas. No optimization can be done on this
+ * servlet since the url call is synchronous( even if it is made asynchronous there is no use, since the main thread has 
+ * to wait for this call to complete. And since the caller is txtweb we cannot even do much of anything.
+ * 
+ *   
+ * @Author Varun V Shenoy
+ * @throws java.io.IOException
+ */
 @SuppressWarnings("serial")
 public class Verify extends HttpServlet 
 {
-	final String START_RESPONSE = "<html>"
+	final String START_RESPONSE = "<?xml version=\"1.0\"><html>"
 	            +"<head>"
 	            +"<meta name='txtweb-appkey' content='64f42155-855a-4bef-9549-883c7da61a06'>"
 	            +"</head>"
@@ -330,7 +329,6 @@ INSTANT MESSENGER: 220x
 	    	Entity alreadyPresentMobileHashEntity = it.next();
 	    	alreadyPresentMobileHashEntity.setProperty("mobilehash", mobileHash);
 	    	datastore.put(alreadyPresentMobileHashEntity);
-	    	System.out.println("Yeahmmmm");
 	    	successful = true;
 	    }
 	    else{

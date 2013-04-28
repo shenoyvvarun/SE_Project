@@ -23,4 +23,4 @@ function validate(event) {
         var form = document.getElementById("form");
         form.submit();
     }
-}
+    
