@@ -22,4 +22,4 @@ Vijay Teja
 
 Developed Using Eclipse With PyDev Plugin
 
-Version 0.1 (Pre Alpha)(Unstable)(Will Not RUN)
+Version 1.0 (stable)
