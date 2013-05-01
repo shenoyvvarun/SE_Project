@@ -56,7 +56,7 @@ import com.google.appengine.api.datastore.Query;
 @SuppressWarnings("serial")
 public class Verify extends HttpServlet 
 {
-	final String START_RESPONSE = "<?xml version=\"1.0\"><html>"
+	final String START_RESPONSE = "<html>"
 	            +"<head>"
 	            +"<meta name='txtweb-appkey' content='64f42155-855a-4bef-9549-883c7da61a06'>"
 	            +"</head>"
